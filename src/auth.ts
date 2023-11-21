@@ -44,4 +44,27 @@ export const { signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    // @ts-ignore
+    async jwt({ token, user }) {
+      if (user) {
+        // @ts-ignore
+        token.username = user.username;
+        // @ts-ignore
+        token.img = user.img;
+      }
+
+      return token;
+    },
+    async session({ session, token }) {
+      if (session) {
+        // @ts-ignore
+        session.user.username = token.username;
+        // @ts-ignore
+        session.user.img = token.img;
+      }
+
+      return session;
+    },
+  },
 });
