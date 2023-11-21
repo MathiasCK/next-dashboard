@@ -82,6 +82,29 @@ export const updateUser = async (formData: FormData) => {
   redirect("/dashboard/users");
 };
 
+export const addProduct = async (formData: FormData) => {
+  const data = Object.fromEntries(formData);
+  let page = 1;
+
+  try {
+    await connectToDB();
+
+    const newProduct = new Product(data);
+
+    await newProduct.save();
+    const count = await Product.find().count();
+
+    page = Math.ceil(
+      count / parseInt(process.env.NEXT_PUBLIC_ITEMS_PER_PAGE as string),
+    );
+  } catch (error) {
+    throw new Error(`Failed to create product "${data.title}" - ${error}`);
+  }
+
+  revalidatePath("/dashboard/products/");
+  redirect(`/dashboard/products?page=${page}`);
+};
+
 export const updateProduct = async (formData: FormData) => {
   const { id, title, desc, price, stock, color, size } =
     Object.fromEntries(formData);
