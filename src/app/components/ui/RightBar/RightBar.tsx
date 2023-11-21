@@ -1,5 +1,5 @@
 import Image from "next/image";
-import styles from "./Rightbar.module.css";
+import styles from "./RightBar.module.css";
 import { MdPlayCircleFilled, MdReadMore } from "react-icons/md";
 
 const Rightbar = () => {
