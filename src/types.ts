@@ -40,3 +40,19 @@ export type SearchParamsProps = {
     page?: string;
   };
 };
+
+export type ParamsIdProps = {
+  params: {
+    id: string;
+  };
+};
+
+export type UserUpdateFields = {
+  username: FormDataEntryValue;
+  email: FormDataEntryValue;
+  password: FormDataEntryValue;
+  phone: FormDataEntryValue;
+  address: FormDataEntryValue;
+  isAdmin: boolean;
+  isActive: boolean;
+};

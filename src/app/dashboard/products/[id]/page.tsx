@@ -1,31 +1,45 @@
+import { ParamsIdProps } from "@/types";
 import styles from "./product.module.css";
 import Image from "next/image";
+import { NextPage } from "next";
+import { fetchProduct } from "@/utils/data";
+import { updateProduct } from "@/utils/actions";
 
-const SingleProductPage = async () => {
+const SingleProductPage: NextPage<ParamsIdProps> = async ({ params }) => {
+  const product = await fetchProduct(params.id);
   return (
     <div className={styles.container}>
       <div className={styles.infoContainer}>
         <div className={styles.imgContainer}>
-          <Image src="/noavatar.png" alt="" fill />
+          <Image src={product.img || "/noavatar.png"} alt="" fill />
         </div>
-        Example product
+        {product.title}
       </div>
       <div className={styles.formContainer}>
-        <form action="" className={styles.form}>
-          <input type="hidden" name="id" />
+        <form action={updateProduct} className={styles.form}>
+          <input type="hidden" name="id" value={product.id} />
           <label>Title</label>
-          <input type="text" name="title" placeholder="Title" />
+          <input type="text" name="title" placeholder={product.title} />
           <label>Price</label>
-          <input type="number" name="price" placeholder="Size" />
+          <input
+            type="number"
+            name="price"
+            placeholder={product.price.toString()}
+          />
           <label>Stock</label>
-          <input type="number" name="stock" placeholder="Stock" />
+          <input
+            type="number"
+            name="stock"
+            placeholder={product.stock.toString()}
+          />
           <label>Color</label>
-          <input type="text" name="color" placeholder="color" />
+          <input type="text" name="color" placeholder={product.color} />
           <label>Size</label>
-          <textarea name="size" placeholder="size" />
+          <textarea name="size" placeholder={product.size} />
           <label>Cat</label>
           <select name="cat" id="cat">
             <option value="kitchen">Kitchen</option>
+            <option value="phone">Phone</option>
             <option value="computers">Computers</option>
           </select>
           <label>Description</label>
@@ -33,7 +47,7 @@ const SingleProductPage = async () => {
             name="desc"
             id="desc"
             rows={10}
-            placeholder="Description"
+            value={product.desc}
           ></textarea>
           <button>Update</button>
         </form>

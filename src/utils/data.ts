@@ -1,6 +1,6 @@
 import { Product, User } from "./models";
 import { connectToDB } from "./connect";
-import { ProductResponse, UserResponse } from "@/types";
+import { IProduct, IUser, ProductResponse, UserResponse } from "@/types";
 
 export const fetchUsers = async (
   q: string,
@@ -21,7 +21,17 @@ export const fetchUsers = async (
       .skip(itemsPerPage * (parseInt(page) - 1));
     return { users, count };
   } catch (error) {
-    throw new Error(`Could not fetch users: ${(error as Error).message}`);
+    throw new Error(`Could not fetch users: ${error}`);
+  }
+};
+
+export const fetchUser = async (id: string): Promise<IUser> => {
+  try {
+    await connectToDB();
+    const user = await User.findById(id);
+    return user;
+  } catch (error) {
+    throw new Error(`Could not fetch user with id "${id}": ${error}`);
   }
 };
 
@@ -43,6 +53,16 @@ export const fetchProducts = async (
       .skip(itemsPerPage * (parseInt(page) - 1));
     return { products, count };
   } catch (error) {
-    throw new Error(`Could not fetch products: ${(error as Error).message}`);
+    throw new Error(`Could not fetch products: ${error}`);
+  }
+};
+
+export const fetchProduct = async (id: string): Promise<IProduct> => {
+  try {
+    await connectToDB();
+    const product = await Product.findById(id);
+    return product;
+  } catch (error) {
+    throw new Error(`Could not fetch user with id "${id}": ${error}`);
   }
 };

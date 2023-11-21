@@ -4,6 +4,7 @@ import { connectToDB } from "./connect";
 import { Product, User } from "./models";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
+import { UserUpdateFields } from "@/types";
 
 export const addUser = async (formData: FormData) => {
   const data = Object.fromEntries(formData);
@@ -28,7 +29,7 @@ export const addUser = async (formData: FormData) => {
       count / parseInt(process.env.NEXT_PUBLIC_ITEMS_PER_PAGE as string),
     );
   } catch (error) {
-    throw new Error(`Could not create user: ${error}`);
+    throw new Error(`Failed to create user "${data.username}" - ${error}`);
   }
 
   revalidatePath("/dashboard/users/");
@@ -36,49 +37,91 @@ export const addUser = async (formData: FormData) => {
 };
 
 export const deleteUser = async (formData: FormData) => {
-  const { id } = Object.fromEntries(formData.entries());
+  const { id, username } = Object.fromEntries(formData.entries());
 
   try {
     await connectToDB();
 
     await User.findByIdAndDelete(id);
   } catch (error) {
-    throw new Error(`Could not delete user: ${error}`);
+    throw new Error(`Failed to delete user "${username}" - ${error}`);
   }
 
   revalidatePath("/dashboard/users/");
 };
 
-export const addProduct = async (formData: FormData) => {
-  const data = Object.fromEntries(formData.entries());
-  let page = 1;
+export const updateUser = async (formData: FormData) => {
+  const { id, username, email, password, phone, address, isAdmin, isActive } =
+    Object.fromEntries(formData.entries());
 
   try {
     await connectToDB();
-    const newProduct = new Product(data);
 
-    await newProduct.save();
-    const count = await Product.find().count();
-    page = Math.ceil(
-      count / parseInt(process.env.NEXT_PUBLIC_ITEMS_PER_PAGE as string),
+    const updateFields: UserUpdateFields = {
+      username: username,
+      email: email,
+      password: password,
+      phone: phone,
+      address: address,
+      isAdmin: isAdmin === "true",
+      isActive: isActive === "true",
+    };
+
+    Object.keys(updateFields).forEach(
+      key =>
+        // @ts-ignore
+        (updateFields[key] === "" || undefined) && delete updateFields[key],
     );
+
+    await User.findByIdAndUpdate(id, updateFields);
   } catch (error) {
-    throw new Error(`Could not create product: ${error}`);
+    throw new Error(`Failed to update user "${id}" - ${error}`);
   }
 
-  revalidatePath("/dashboard/products/");
-  redirect(`/dashboard/products?page=${page}`);
+  revalidatePath("/dashboard/users");
+  redirect("/dashboard/users");
+};
+
+export const updateProduct = async (formData: FormData) => {
+  const { id, title, desc, price, stock, color, size } =
+    Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+
+    const updateFields = {
+      title,
+      desc,
+      price,
+      stock,
+      color,
+      size,
+    };
+
+    Object.keys(updateFields).forEach(
+      key =>
+        // @ts-ignore
+        (updateFields[key] === "" || undefined) && delete updateFields[key],
+    );
+
+    await Product.findByIdAndUpdate(id, updateFields);
+  } catch (error) {
+    throw new Error(`Failed to update product "${id}" - ${error}`);
+  }
+
+  revalidatePath("/dashboard/products");
+  redirect("/dashboard/products");
 };
 
 export const deleteProduct = async (formData: FormData) => {
-  const { id } = Object.fromEntries(formData.entries());
+  const { id, title } = Object.fromEntries(formData.entries());
 
   try {
     await connectToDB();
 
     await Product.findByIdAndDelete(id);
   } catch (error) {
-    throw new Error(`Could not delete product: ${error}`);
+    throw new Error(`Failed to delete product "${title}" - ${error}`);
   }
 
   revalidatePath("/dashboard/products/");
