@@ -1,25 +1,5 @@
-import mongoose, { Document, Schema } from "mongoose";
-
-export interface IUser extends Document {
-  username: string;
-  email: string;
-  password: string;
-  img?: string;
-  isAdmin: boolean;
-  isActive: boolean;
-  phone?: string;
-  address?: string;
-}
-
-export interface IProduct extends Document {
-  title: string;
-  desc: string;
-  price: number;
-  stock: number;
-  img?: string;
-  color?: string;
-  size?: string;
-}
+import { IProduct, IUser } from "@/types";
+import mongoose, { Schema } from "mongoose";
 
 const userSchema: Schema<IUser> = new mongoose.Schema(
   {
@@ -55,6 +35,9 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
     },
     address: {
       type: String,
+    },
+    createdAt: {
+      type: Date,
     },
   },
   { timestamps: true },

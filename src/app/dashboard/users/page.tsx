@@ -2,18 +2,20 @@ import { Pagination, Search } from "@/app/components/dashboard";
 import styles from "./users.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import { fetchUsers } from "@/app/utils/data";
-import { IUser } from "@/app/utils/models";
+import { fetchUsers } from "@/utils/data";
 import { NextPage } from "next";
+import { UserResponse } from "@/types";
 
 interface Props {
   searchParams: {
     q?: string;
+    page?: string;
   };
 }
 const UsersPage: NextPage<Props> = async ({ searchParams }) => {
   const q = searchParams?.q || "";
-  const users: IUser[] = await fetchUsers(q);
+  const page = searchParams?.page || "1";
+  const { users, count }: UserResponse = await fetchUsers(q, page);
 
   return (
     <div className={styles.container}>
@@ -50,7 +52,6 @@ const UsersPage: NextPage<Props> = async ({ searchParams }) => {
                 </div>
               </td>
               <td>{user.email}</td>
-              {/* @ts-ignore */}
               <td>{user.createdAt.toString().slice(4, 16)}</td>
               <td>{user.isAdmin ? "Admin" : "Client"}</td>
               <td>{user.isActive ? "Active" : "Passive"}</td>
@@ -68,7 +69,7 @@ const UsersPage: NextPage<Props> = async ({ searchParams }) => {
           ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination count={count} />
     </div>
   );
 };

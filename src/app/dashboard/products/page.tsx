@@ -53,7 +53,7 @@ const ProductsPage = () => {
           </tr>
         </tbody>
       </table>
-      <Pagination />
+      <Pagination count={0} />
     </div>
   );
 };
