@@ -4,15 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { fetchUsers } from "@/utils/data";
 import { NextPage } from "next";
-import { UserResponse } from "@/types";
+import { PageProps, UserResponse } from "@/types";
 
-interface Props {
-  searchParams: {
-    q?: string;
-    page?: string;
-  };
-}
-const UsersPage: NextPage<Props> = async ({ searchParams }) => {
+const UsersPage: NextPage<PageProps> = async ({ searchParams }) => {
   const q = searchParams?.q || "";
   const page = searchParams?.page || "1";
   const { users, count }: UserResponse = await fetchUsers(q, page);

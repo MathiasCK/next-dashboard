@@ -73,6 +73,9 @@ const productSchema: Schema<IProduct> = new mongoose.Schema(
     size: {
       type: String,
     },
+    createdAt: {
+      type: Date,
+    },
   },
   { timestamps: true },
 );

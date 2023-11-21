@@ -21,9 +21,22 @@ export interface IProduct extends Document {
   img?: string;
   color?: string;
   size?: string;
+  createdAt: Date;
 }
 
 export type UserResponse = {
   users: IUser[];
   count: number;
+};
+
+export type ProductResponse = {
+  products: IProduct[];
+  count: number;
+};
+
+export type PageProps = {
+  searchParams: {
+    q?: string;
+    page?: string;
+  };
 };
