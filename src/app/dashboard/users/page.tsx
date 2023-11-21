@@ -5,6 +5,7 @@ import Image from "next/image";
 import { fetchUsers } from "@/utils/data";
 import { NextPage } from "next";
 import { PageProps, UserResponse } from "@/types";
+import { deleteUser } from "@/utils/actions";
 
 const UsersPage: NextPage<PageProps> = async ({ searchParams }) => {
   const q = searchParams?.q || "";
@@ -50,14 +51,19 @@ const UsersPage: NextPage<PageProps> = async ({ searchParams }) => {
               <td>{user.isAdmin ? "Admin" : "Client"}</td>
               <td>{user.isActive ? "Active" : "Passive"}</td>
               <td>
-                <Link href={`/dashboard/users/${user.id}`}>
-                  <button className={`${styles.button} ${styles.view}`}>
-                    View
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Delete
-                </button>
+                <div className={styles.buttons}>
+                  <Link href={`/dashboard/users/${user.id}`}>
+                    <button className={`${styles.button} ${styles.view}`}>
+                      View
+                    </button>
+                  </Link>
+                  <form action={deleteUser}>
+                    <input type="hidden" name="id" value={user.id} />
+                    <button className={`${styles.button} ${styles.delete}`}>
+                      Delete
+                    </button>
+                  </form>
+                </div>
               </td>
             </tr>
           ))}

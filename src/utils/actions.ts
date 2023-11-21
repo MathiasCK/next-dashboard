@@ -28,11 +28,25 @@ export const addUser = async (formData: FormData) => {
       count / parseInt(process.env.NEXT_PUBLIC_ITEMS_PER_PAGE as string),
     );
   } catch (error) {
-    throw new Error(`Could not create user: ${(error as Error).message}`);
+    throw new Error(`Could not create user: ${error}`);
   }
 
   revalidatePath("/dashboard/users/");
   redirect(`/dashboard/users?page=${page}`);
+};
+
+export const deleteUser = async (formData: FormData) => {
+  const { id } = Object.fromEntries(formData.entries());
+
+  try {
+    await connectToDB();
+
+    await User.findByIdAndDelete(id);
+  } catch (error) {
+    throw new Error(`Could not delete user: ${error}`);
+  }
+
+  revalidatePath("/dashboard/users/");
 };
 
 export const addProduct = async (formData: FormData) => {
@@ -49,9 +63,23 @@ export const addProduct = async (formData: FormData) => {
       count / parseInt(process.env.NEXT_PUBLIC_ITEMS_PER_PAGE as string),
     );
   } catch (error) {
-    throw new Error(`Could not create user: ${(error as Error).message}`);
+    throw new Error(`Could not create product: ${error}`);
   }
 
-  revalidatePath("/products/users/");
+  revalidatePath("/dashboard/products/");
   redirect(`/dashboard/products?page=${page}`);
+};
+
+export const deleteProduct = async (formData: FormData) => {
+  const { id } = Object.fromEntries(formData.entries());
+
+  try {
+    await connectToDB();
+
+    await Product.findByIdAndDelete(id);
+  } catch (error) {
+    throw new Error(`Could not delete product: ${error}`);
+  }
+
+  revalidatePath("/dashboard/products/");
 };

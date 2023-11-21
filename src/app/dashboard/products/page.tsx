@@ -5,6 +5,7 @@ import Image from "next/image";
 import { fetchProducts } from "@/utils/data";
 import { NextPage } from "next";
 import { PageProps, ProductResponse } from "@/types";
+import { deleteProduct } from "@/utils/actions";
 
 const ProductsPage: NextPage<PageProps> = async ({ searchParams }) => {
   const q = searchParams?.q || "";
@@ -50,14 +51,19 @@ const ProductsPage: NextPage<PageProps> = async ({ searchParams }) => {
               <td>{product.createdAt.toString().slice(4, 16)}</td>
               <td>{product.stock}</td>
               <td>
-                <Link href={`/dashboard/products/${product._id}`}>
-                  <button className={`${styles.button} ${styles.view}`}>
-                    View
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Delete
-                </button>
+                <div className={styles.buttons}>
+                  <Link href={`/dashboard/products/${product.id}`}>
+                    <button className={`${styles.button} ${styles.view}`}>
+                      View
+                    </button>
+                  </Link>
+                  <form action={deleteProduct}>
+                    <input type="hidden" name="id" value={product.id} />
+                    <button className={`${styles.button} ${styles.delete}`}>
+                      Delete
+                    </button>
+                  </form>
+                </div>
               </td>
             </tr>
           ))}
