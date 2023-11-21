@@ -1,5 +1,4 @@
 import { Document } from "mongoose";
-import { type } from "os";
 
 export interface IUser extends Document {
   username: string;
