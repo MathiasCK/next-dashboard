@@ -1,4 +1,4 @@
-import styles from "./loginform.module.css";
+import styles from "./Loginform.module.css";
 const Loginform = () => {
   return (
     <form action="" className={styles.form}>

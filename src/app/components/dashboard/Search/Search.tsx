@@ -1,6 +1,6 @@
 "use client";
 import { FC, ChangeEvent } from "react";
-import styles from "./search.module.css";
+import styles from "./Search.module.css";
 import { MdSearch } from "react-icons/md";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
@@ -17,6 +17,8 @@ const Search: FC<Props> = ({ placeholder }) => {
   const handleSearch = useDebouncedCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const params = new URLSearchParams(searchParams);
+
+      params.set("page", "1");
 
       if (e.target.value) {
         params.set("q", e.target.value);

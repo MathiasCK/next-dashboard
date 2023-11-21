@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import styles from "./menuLink.module.css";
+import styles from "./MenuLink.module.css";
 import { FC, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
