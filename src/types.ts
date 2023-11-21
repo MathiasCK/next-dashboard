@@ -34,7 +34,7 @@ export type ProductResponse = {
   count: number;
 };
 
-export type PageProps = {
+export type SearchParamsProps = {
   searchParams: {
     q?: string;
     page?: string;

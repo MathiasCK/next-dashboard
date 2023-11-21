@@ -4,10 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { fetchProducts } from "@/utils/data";
 import { NextPage } from "next";
-import { PageProps, ProductResponse } from "@/types";
+import { SearchParamsProps, ProductResponse } from "@/types";
 import { deleteProduct } from "@/utils/actions";
 
-const ProductsPage: NextPage<PageProps> = async ({ searchParams }) => {
+const ProductsPage: NextPage<SearchParamsProps> = async ({ searchParams }) => {
   const q = searchParams?.q || "";
   const page = searchParams?.page || "1";
   const { products, count }: ProductResponse = await fetchProducts(q, page);

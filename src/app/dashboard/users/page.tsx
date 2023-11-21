@@ -4,10 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { fetchUsers } from "@/utils/data";
 import { NextPage } from "next";
-import { PageProps, UserResponse } from "@/types";
+import { SearchParamsProps, UserResponse } from "@/types";
 import { deleteUser } from "@/utils/actions";
 
-const UsersPage: NextPage<PageProps> = async ({ searchParams }) => {
+const UsersPage: NextPage<SearchParamsProps> = async ({ searchParams }) => {
   const q = searchParams?.q || "";
   const page = searchParams?.page || "1";
   const { users, count }: UserResponse = await fetchUsers(q, page);
